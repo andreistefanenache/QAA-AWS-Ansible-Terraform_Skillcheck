@@ -1,0 +1,52 @@
+- name: Get Jenkins repo
+  shell: |
+    wget -O /usr/share/keyrings/jenkins-keyring.asc https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+    echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/ | sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null
+  become: true
+- name: Install Java 17
+  apt:
+    name: openjdk-17-jre
+    update-cache: true
+  become: true
+- name: Install Jenkins
+  apt:
+    name: jenkins
+  become: true
+- name: Make sure we have a 'wheel' group
+  group:
+    name: wheel
+    state: present
+  become: true
+- name: Allow 'wheel' group to have passwordless sudo
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: '^%wheel'
+    line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+    validate: 'visudo -cf %s'
+  become: true
+- name: Add jenkins to wheel group
+  user:
+    name: jenkins
+    groups: wheel
+    append: yes
+  become: true
+- name: Add jenkins to docker group
+  user:
+    name: jenkins
+    groups: docker
+    append: yes
+  become: true
+- name: Check Jenkins Service
+  service:
+    name: jenkins
+    state: restarted
+  become: true
+- name: Get password
+  fetch:
+    src: /var/lib/jenkins/secrets/initialAdminPassword
+    dest: ./initialAdminPassword
+  become: true
+- name: Confirm with user
+  debug:
+    msg: Please check the local initialAdminPassword

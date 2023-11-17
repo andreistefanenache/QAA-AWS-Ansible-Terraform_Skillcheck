@@ -1,0 +1,16 @@
+- name: Update apt cache
+  apt:
+    update-cache: true
+  become: true
+- name: Install curl
+  apt:
+    name: curl
+  become: true
+- name: Install wget
+  apt:
+    name: wget
+  become: true
+- name: Install unzip
+  apt:
+    name: unzip
+  become: true

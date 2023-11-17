@@ -1,0 +1,17 @@
+- name: Update apt cache
+  apt:
+    update-cache: true
+  become: true
+- name: Install Docker
+  apt:
+    name: docker.io
+  become: true
+- name: Add user to Docker group
+  user:
+    name: ubuntu
+    groups: docker
+    append: true
+  become: true
+- name: Reset ssh connection to allow user changes to affect ubuntu user
+  meta:
+    reset_connection

@@ -1,0 +1,6 @@
+- name: Confirm all works with user
+  debug:
+    msg: The app at https://github.com/andreistefanenache/nodeapp needs to be set up by now (use the Jenkins instance)
+- name: Set up app
+  shell:
+     sudo fuser 80/tcp || docker run -d -p 80:5000 -it andreistefanenache/nodeapp

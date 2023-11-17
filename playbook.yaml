@@ -1,0 +1,19 @@
+- hosts: ci
+  tasks:
+    - name: Set up unzip, wget and curl
+      import_role:
+        name: unpack
+    - name: Set up Docker
+      import_role:
+        name: docker
+    - name: Set up Jenkins
+      import_role:
+        name: jenkins
+- hosts: deployment
+  tasks:
+    - name: Set up Docker
+      import_role:
+        name: docker
+    - name: Deploy app
+      import_role:
+        name: deploy
