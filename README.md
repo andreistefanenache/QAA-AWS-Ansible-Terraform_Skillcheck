@@ -12,3 +12,5 @@ ansible-playbook -i inventory.yaml playbook.yaml
 ansible-playbook -i inventory.yaml playbook.yaml
 # This time the script should succeed.
 ```
+
+Side note: secret.auto.tfvars is an example secrets file, the secrets are random text.
